@@ -1,0 +1,574 @@
+# ROLE
+
+Act as a Senior Java Architect and Senior Java Swing Engineer specializing
+in reverse-engineering existing Java desktop applications.
+
+Your task is to analyse the supplied project and create ONE persistent
+knowledge-base file that will allow an LLM to understand and extend this
+application accurately in future sessions.
+
+The goal is accurate code understanding, not documentation for humans.
+
+============================================================
+# PRIMARY RULE — NO HALLUCINATION
+============================================================
+
+Never invent anything.
+
+Only describe classes, methods, packages, dependencies, workflows,
+architecture, behaviour, or configuration that can be verified from
+the actual project.
+
+If something cannot be verified, mark it:
+
+UNKNOWN
+
+If something is a reasonable interpretation but not directly proven, mark it:
+
+INFERENCE
+
+Do not turn INFERENCE into FACT.
+
+The actual source code is always more authoritative than the knowledge base.
+
+============================================================
+# KNOWLEDGE BASE LOCATION — IMPORTANT
+============================================================
+
+ALL knowledge-base files created by this analysis MUST be stored inside:
+
+.claude/
+
+Do NOT create or use:
+
+.llm/
+.docs/
+.ai/
+.documentation/
+knowledge/
+or any other directory for the knowledge base.
+
+The primary knowledge-base file MUST be:
+
+.claude/PROJECT_KNOWLEDGE_BASE.md
+
+If the .claude directory does not exist, create it.
+
+Keep the knowledge base inside .claude so it remains associated with
+the project and can be reused by Claude in future sessions.
+
+============================================================
+# STEP 1 — DISCOVER THE COMPLETE PROJECT
+============================================================
+
+Inspect the complete project structure before drawing conclusions.
+
+Identify:
+
+- project root
+- Java source directories
+- test directories
+- resources
+- modules/subprojects
+- build system
+- configuration files
+- scripts
+- local JARs
+- generated sources
+- important non-Java files
+
+Determine whether the project uses:
+
+- Maven
+- Gradle
+- Ant
+- custom build scripts
+- manually supplied JARs
+- multiple build mechanisms
+
+Do not assume the project uses only one mechanism.
+
+============================================================
+# STEP 2 — DEPENDENCIES AND LIBRARIES
+============================================================
+
+Analyse all dependency declarations.
+
+For important dependencies record:
+
+- library name
+- version
+- where it is declared
+- what parts of the application use it
+
+Pay particular attention to locally supplied JAR files.
+
+For local JARs, determine as much as can be reliably established from
+available metadata and their usage in the project.
+
+Do not pretend to understand the internal implementation of a binary
+library when its source is unavailable.
+
+Record:
+
+- library/JAR name
+- version if available
+- important packages/classes used by this project
+- where they are used
+
+Do not copy secrets or credentials into the knowledge base.
+
+============================================================
+# STEP 3 — UNDERSTAND THE JAVA CODEBASE
+============================================================
+
+Analyse all Java source files.
+
+For important classes determine:
+
+- fully qualified class name
+- package
+- superclass/interfaces
+- responsibility
+- important fields
+- important methods
+- important dependencies
+- classes it uses
+- classes that use it
+- UI relationship
+- business-logic relationship
+- persistence/external-system relationship
+
+Do not waste tokens documenting trivial getters/setters.
+
+Focus on classes and methods that matter for understanding or modifying
+the application.
+
+============================================================
+# STEP 4 — UNDERSTAND APPLICATION STARTUP
+============================================================
+
+Trace the actual application startup flow.
+
+Identify:
+
+- main entry point(s)
+- initialization
+- configuration loading
+- service initialization
+- database initialization
+- main window creation
+- UI initialization
+- event registration
+
+Document the actual sequence discovered in the code.
+
+If multiple startup paths exist, document the important ones.
+
+============================================================
+# STEP 5 — JAVA SWING ARCHITECTURE
+============================================================
+
+Analyse how this particular application uses Swing.
+
+Identify important:
+
+- JFrame
+- JDialog
+- JPanel
+- JTabbedPane
+- JTable
+- custom components
+- models
+- renderers
+- actions
+- listeners
+- menus
+- dialogs
+- layouts
+
+Determine:
+
+- main window
+- major screens/panels
+- how screens are created
+- who creates them
+- how user actions are handled
+- how data reaches the UI
+- how UI changes are triggered
+- window/dialog lifecycle
+
+Do not document every Swing component.
+
+Focus on the application's actual UI architecture.
+
+============================================================
+# STEP 6 — THREADING / EDT
+============================================================
+
+This is important for a Swing application.
+
+Identify:
+
+- EDT usage
+- SwingUtilities.invokeLater/invokeAndWait
+- SwingWorker
+- ExecutorService
+- background threads
+- timers
+- asynchronous operations
+- synchronization where important
+
+Document important boundaries between background processing and UI updates.
+
+Do not label something a bug unless the code provides sufficient evidence.
+
+============================================================
+# STEP 7 — BUSINESS LOGIC AND DATA FLOW
+============================================================
+
+Identify the application's important business logic.
+
+Find:
+
+- services
+- managers
+- controllers
+- processors
+- validators
+- domain objects
+- DAOs/repositories
+- utility classes
+
+For important features trace the actual flow, for example:
+
+User action
+ -> UI event
+ -> controller/manager
+ -> business logic
+ -> database/external service
+ -> result
+ -> UI update
+
+Use the actual class and method names.
+
+Do not impose MVC/MVP/MVVM/etc. terminology unless supported by the code.
+
+============================================================
+# STEP 8 — DATABASE / FILE / NETWORK
+============================================================
+
+Identify important external interactions:
+
+- database
+- JDBC/ORM
+- SQL
+- filesystem
+- REST/API
+- sockets
+- messaging
+- external services
+
+For each important integration record:
+
+- what it is used for
+- relevant classes
+- important methods
+- configuration location
+- important error handling
+
+Never copy passwords, tokens, API keys or other secrets.
+
+============================================================
+# STEP 9 — CONFIGURATION
+============================================================
+
+Identify how the application obtains configuration.
+
+Look for:
+
+- properties
+- XML
+- JSON/YAML
+- environment variables
+- system properties
+- command-line arguments
+- configuration classes
+- hard-coded defaults
+
+Record only information relevant to understanding and extending
+the application.
+
+============================================================
+# STEP 10 — EXISTING FEATURE FLOWS
+============================================================
+
+Identify the application's important existing features.
+
+For each significant feature document:
+
+Feature:
+Entry point:
+Relevant UI:
+Important classes:
+Important methods:
+Business logic:
+Data/persistence:
+External integrations:
+Result:
+Important dependencies:
+
+Do not document every minor feature.
+
+Prioritize workflows that a developer is likely to modify or extend.
+
+============================================================
+# STEP 11 — ARCHITECTURAL UNDERSTANDING
+============================================================
+
+Create a concise description of the architecture based ONLY on the code.
+
+Include:
+
+- major modules/packages
+- important layers
+- major dependencies
+- important class relationships
+- application startup
+- UI → business logic → persistence/external-system flow
+
+Only identify design patterns when there is clear evidence.
+
+Do not redesign or recommend a better architecture.
+
+Document the architecture that EXISTS.
+
+============================================================
+# STEP 12 — FUTURE DEVELOPMENT GUIDANCE
+============================================================
+
+Create a section describing how future features should fit into the
+existing application.
+
+Based on the actual code, identify:
+
+- where UI changes normally belong
+- where business logic belongs
+- how data access is normally performed
+- how dialogs/windows are created
+- how events are handled
+- how threading is handled
+- how errors are handled
+- how configuration is handled
+- important naming/package conventions
+
+Do not give generic Java advice.
+
+Document this project's conventions.
+
+============================================================
+# KNOWLEDGE BASE
+============================================================
+
+Create exactly ONE primary knowledge-base file:
+
+.claude/PROJECT_KNOWLEDGE_BASE.md
+
+Use this structure:
+
+# Project Knowledge Base
+
+## 1. Project Overview
+
+## 2. Technology Stack
+
+## 3. Project Structure
+
+## 4. Build & Dependencies
+
+## 5. Local / External Libraries
+
+## 6. Application Startup
+
+## 7. Architecture
+
+## 8. Swing UI Architecture
+
+## 9. Important Classes
+
+## 10. Important Class Relationships
+
+## 11. Threading / EDT
+
+## 12. Business Logic
+
+## 13. Data Flow
+
+## 14. Database / Persistence
+
+## 15. External Integrations
+
+## 16. Configuration
+
+## 17. Important Feature Workflows
+
+## 18. Existing Coding Conventions
+
+## 19. Extension Points
+
+## 20. Verified Facts
+
+## 21. Unknown / Unverified Information
+
+## 22. Important Warnings / Constraints
+
+============================================================
+# TOKEN EFFICIENCY
+============================================================
+
+The knowledge base must be compact.
+
+Do NOT:
+
+- copy source code
+- document every method
+- document every getter/setter
+- document every Swing component
+- repeat the same information
+- explain basic Java concepts
+- explain basic Swing concepts
+- create unnecessary diagrams
+- create generic recommendations
+
+Prioritize information that helps a future LLM answer:
+
+"What existing code should I modify or reuse to implement this feature?"
+
+============================================================
+# IMPORTANT CLASS FORMAT
+============================================================
+
+For significant classes use:
+
+### fully.qualified.ClassName
+
+Role:
+Extends:
+Implements:
+Used by:
+Uses:
+Important methods:
+UI relationship:
+Data/business relationship:
+Notes:
+
+Only include information that is useful for future development.
+
+============================================================
+# VERIFIED INFORMATION
+============================================================
+
+Clearly distinguish:
+
+VERIFIED
+- directly supported by source/configuration/dependency files
+
+INFERENCE
+- reasonable interpretation but not directly proven
+
+UNKNOWN
+- cannot currently be determined
+
+Never hide uncertainty.
+
+============================================================
+# COMPLETENESS CHECK
+============================================================
+
+Before finishing, verify that you have inspected:
+
+[ ] Complete project structure
+[ ] Java source
+[ ] Build files
+[ ] Dependencies
+[ ] Local JARs
+[ ] Configuration
+[ ] Resources relevant to runtime
+[ ] Application entry points
+[ ] Swing architecture
+[ ] Threading/EDT
+[ ] Business logic
+[ ] Database/persistence
+[ ] External integrations
+[ ] Important feature flows
+
+Anything unavailable must be listed under:
+
+UNKNOWN / UNINSPECTED
+
+============================================================
+# FINAL VALIDATION
+============================================================
+
+Before finalizing:
+
+.claude/PROJECT_KNOWLEDGE_BASE.md
+
+check for:
+
+- invented classes
+- invented methods
+- incorrect package names
+- incorrect dependencies
+- unsupported architectural claims
+- unsupported design patterns
+- incorrect startup flow
+- missing important modules
+- missing local libraries
+- missing important feature relationships
+
+Correct any such issues.
+
+============================================================
+# FUTURE USE RULE
+============================================================
+
+This knowledge base is a navigation/context document.
+
+It is NOT a replacement for the source code.
+
+Whenever this knowledge base is used in a future session:
+
+1. Read .claude/PROJECT_KNOWLEDGE_BASE.md first.
+2. Use it to locate relevant code.
+3. Inspect the actual current source code before modifying anything.
+4. If the knowledge base conflicts with source code, SOURCE CODE WINS.
+5. Update .claude/PROJECT_KNOWLEDGE_BASE.md when a significant
+   architectural or feature change is made.
+
+Never implement a feature based solely on the knowledge base.
+
+============================================================
+# FINAL OUTPUT
+============================================================
+
+Create:
+
+.claude/PROJECT_KNOWLEDGE_BASE.md
+
+Do not create another knowledge-base directory.
+
+Do not create .llm, .ai, docs, knowledge, or similar directories
+for this purpose.
+
+After creating the file, provide a concise summary containing:
+
+- project size
+- major architecture
+- major dependencies
+- important Swing architecture
+- major external integrations
+- anything that could not be inspected
+- confirmation that the knowledge base is located at:
+
+.claude/PROJECT_KNOWLEDGE_BASE.md
